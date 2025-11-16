@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppData, useGeneralStats } from '../hooks/useAppData';
 import '../pages/Wardrobe.css';
+import { APP_VERSION } from '../utils/version';
 import './Statistics.css';
 
 const Statistics: React.FC = () => {
@@ -170,6 +171,11 @@ const Statistics: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* App Version */}
+      <div style={{ textAlign: 'center', padding: '2rem 0 1rem', color: '#888', fontSize: '0.875rem' }}>
+        v{APP_VERSION}
+      </div>
     </div>
   );
 };

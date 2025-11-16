@@ -1,10 +1,30 @@
 import react from '@vitejs/plugin-react';
+import { execSync } from 'child_process';
+import { readFileSync } from 'fs';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+// Get package version
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
+const version = packageJson.version;
+
+// Get git commit hash (or use 'dev' for development)
+let commitHash = 'dev';
+try {
+  commitHash = execSync('git rev-parse --short HEAD').toString().trim();
+} catch (error) {
+  // If not in a git repo or git is not available, use 'dev'
+  commitHash = 'dev';
+}
+
+const appVersion = `${version}-${commitHash}`;
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/ciuchoteka', // Set the base URL to /ciuchoteka
+  define: {
+    __APP_VERSION__: JSON.stringify(appVersion),
+  },
   plugins: [
     react(),
     VitePWA({
