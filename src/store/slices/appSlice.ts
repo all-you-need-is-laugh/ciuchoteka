@@ -44,11 +44,11 @@ const appSlice = createSlice({
     setStorageUsage: (state, action: PayloadAction<number>) => {
       state.storageUsage = action.payload;
     },
-    loadAppData: (state, action: PayloadAction<AppData>) => {
+    loadAppData: (state, _action: PayloadAction<AppData>) => {
       // This action will be handled by middleware
       state.isLoading = false;
     },
-    clearAllData: (state) => {
+    clearAllData: (_state) => {
       // This action will be handled by middleware
     },
   },
