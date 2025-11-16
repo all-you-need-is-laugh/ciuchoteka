@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ClothingCategory, ClothingItem } from '../types';
 import { compressClothingImage } from '../utils/imageCompression';
 import './ClothingItemForm.css';
+import ImageUpload from './ImageUpload';
 
 interface ClothingItemFormProps {
   item: ClothingItem | null;
@@ -15,27 +16,7 @@ const ClothingItemForm: React.FC<ClothingItemFormProps> = ({ item, onSave, onCan
   const [type, setType] = useState(item?.type || '');
   const [cost, setCost] = useState(item?.cost?.toString() || '');
   const [photo, setPhoto] = useState(item?.photo || '');
-  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsProcessing(true);
-    setError('');
-
-    try {
-      const compressedImage = await compressClothingImage(file);
-      setPhoto(compressedImage);
-    } catch (err) {
-      setError('Failed to process image. Please try another image.');
-      console.error(err);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,21 +56,12 @@ const ClothingItemForm: React.FC<ClothingItemFormProps> = ({ item, onSave, onCan
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Photo *</label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={handleImageSelect}
-              className="form-input"
-              disabled={isProcessing}
+            <ImageUpload
+              photo={photo}
+              onPhotoChange={setPhoto}
+              onError={setError}
+              compressImage={compressClothingImage}
             />
-            {photo && (
-              <div className="image-preview">
-                <img src={photo} alt="Preview" />
-              </div>
-            )}
-            {isProcessing && <p className="processing-text">Processing image...</p>}
           </div>
 
           <div className="form-group">
@@ -148,7 +120,7 @@ const ClothingItemForm: React.FC<ClothingItemFormProps> = ({ item, onSave, onCan
             <button type="button" className="btn btn-secondary" onClick={onCancel}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={isProcessing}>
+            <button type="submit" className="btn btn-primary">
               {item ? 'Update' : 'Add'}
             </button>
           </div>
