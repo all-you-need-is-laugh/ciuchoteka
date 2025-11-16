@@ -17,9 +17,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   disabled = false,
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
-  const commonInputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,65 +37,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const handleCameraClick = () => {
-    cameraInputRef.current?.click();
-  };
-
-  const handleGalleryClick = () => {
-    galleryInputRef.current?.click();
-  };
-
   const handleCommonClick = () => {
-    commonInputRef.current?.click();
+    inputRef.current?.click();
   };
 
   return (
     <div className="image-upload">
       <input
-        ref={cameraInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        onChange={handleImageSelect}
-        style={{ display: 'none' }}
-        disabled={disabled || isProcessing}
-      />
-      <input
-        ref={galleryInputRef}
+        ref={inputRef}
         type="file"
         accept="image/*"
         onChange={handleImageSelect}
         style={{ display: 'none' }}
         disabled={disabled || isProcessing}
       />
-      <input
-        ref={commonInputRef}
-        type="file"
-        accept="image/*"
-        capture
-        onChange={handleImageSelect}
-        style={{ display: 'none' }}
-        disabled={disabled || isProcessing}
-      />
-
-      <div className="image-upload-buttons">
-        <button
-          type="button"
-          className="btn btn-upload"
-          onClick={handleCameraClick}
-          disabled={disabled || isProcessing}
-        >
-          📷 Take Photo
-        </button>
-        <button
-          type="button"
-          className="btn btn-upload"
-          onClick={handleGalleryClick}
-          disabled={disabled || isProcessing}
-        >
-          🖼️ Choose from Gallery
-        </button>
-      </div>
 
       <div className="image-upload-buttons">
         <button
