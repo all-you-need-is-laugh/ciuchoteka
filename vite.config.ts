@@ -14,8 +14,8 @@ export default defineConfig({
         name: 'Ciuchoteka',
         short_name: 'Ciuchoteka',
         description: 'Wardrobe and outfit management app',
-        theme_color: '#2563eb',
-        background_color: '#ffffff',
+        theme_color: '#3a6890',
+        background_color: '#f4c66a',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
