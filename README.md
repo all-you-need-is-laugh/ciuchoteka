@@ -25,7 +25,7 @@ A Progressive Web App for wardrobe and outfit management, optimized for mobile u
 ### Installation
 
 ```bash
-yarn install --frozen-lockfile
+yarn i
 ```
 
 ### Development

@@ -55,7 +55,7 @@ ciuchoteka/
 ### 1. Install Dependencies
 
 ```bash
-yarn install --frozen-lockfile
+yarn i
 ```
 
 This will install:

@@ -5,7 +5,7 @@
 ### 1️⃣ Install Dependencies
 
 ```bash
-yarn install --frozen-lockfile
+yarn i
 ```
 
 ### 2️⃣ Start Development Server

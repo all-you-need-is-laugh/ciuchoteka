@@ -107,7 +107,7 @@ A fully functional Progressive Web App for wardrobe and outfit management has be
 
 ### 1. Install Dependencies
 ```bash
-yarn install --frozen-lockfile
+yarn i
 ```
 
 ### 2. Replace Icon Placeholders
@@ -200,7 +200,7 @@ Every requirement from your specification has been implemented:
 ## 🔧 Available Commands
 
 ```bash
-yarn install --frozen-lockfile          # Install dependencies
+yarn i          # Install dependencies
 yarn dev          # Start development server
 yarn build        # Build for production
 yarn preview      # Preview production build
