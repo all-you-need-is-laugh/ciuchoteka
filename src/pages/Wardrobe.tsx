@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import ClothingItemCard from '../components/ClothingItemCard';
 import ClothingItemForm from '../components/ClothingItemForm';
-import { useClothingItemStats } from '../hooks/useAppData';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addClothingItem, deleteClothingItem, updateClothingItem } from '../store/slices/clothingItemsSlice';
 import { ClothingItem } from '../types';
@@ -10,22 +9,15 @@ import './Wardrobe.css';
 const Wardrobe: React.FC = () => {
   const dispatch = useAppDispatch();
   const clothingItems = useAppSelector(state => state.clothingItems.items);
-  const outfits = useAppSelector(state => state.outfits.items);
   const isLoading = useAppSelector(state => state.app.isLoading);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ClothingItem | null>(null);
   const [filter, setFilter] = useState<string>('all');
 
-  // Precompute stats for all clothing items at the top level
-  const itemsWithStats = useMemo(() => clothingItems.map(item => ({
-    item,
-    stats: useClothingItemStats(item, outfits),
-  })), [clothingItems, outfits]);
-
-  const filteredItemsWithStats = filter === 'all'
-    ? itemsWithStats
-    : itemsWithStats.filter(({ item }) => item.category === filter);
+  const filteredItems = filter === 'all'
+    ? clothingItems
+    : clothingItems.filter(item => item.category === filter);
 
   const handleAddItem = async (item: Omit<ClothingItem, 'id' | 'dateAdded'>) => {
     dispatch(addClothingItem(item));
@@ -108,7 +100,7 @@ const Wardrobe: React.FC = () => {
         </button>
       </div>
 
-      {filteredItemsWithStats.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <div className="empty-state">
           <div className="empty-state-icon">👔</div>
           <div className="empty-state-text">
@@ -119,11 +111,10 @@ const Wardrobe: React.FC = () => {
         </div>
       ) : (
         <div className="grid">
-          {filteredItemsWithStats.map(({ item, stats }) => (
+          {filteredItems.map(item => (
             <ClothingItemCard
               key={item.id}
               item={item}
-              stats={stats}
               onEdit={() => handleEditClick(item)}
               onDelete={() => handleDeleteClick(item)}
             />

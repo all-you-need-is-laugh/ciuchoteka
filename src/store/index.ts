@@ -5,12 +5,15 @@ import appReducer, { clearAllData as clearAllDataAction, loadAppData, setStorage
 import clothingItemsReducer, { deleteClothingItem, setClothingItems } from './slices/clothingItemsSlice';
 import outfitsReducer, { removeItemFromOutfits, setOutfits } from './slices/outfitsSlice';
 
+// Track if we're loading initial data to prevent circular dispatches
+let isLoadingInitialData = false;
+
 // Middleware to persist state to localStorage
 const persistMiddleware: Middleware = (store) => (next) => (action) => {
   const result = next(action);
   
-  // Skip saving during initial load
-  if (loadAppData.match(action)) {
+  // Skip saving during initial load or for storage usage updates
+  if (isLoadingInitialData || loadAppData.match(action) || setStorageUsage.match(action)) {
     return result;
   }
 
@@ -63,11 +66,13 @@ const clearDataMiddleware: Middleware = (store) => (next) => (action) => {
 // Middleware to handle loadAppData
 const loadDataMiddleware: Middleware = (store) => (next) => (action) => {
   if (loadAppData.match(action)) {
+    isLoadingInitialData = true;
     const data = action.payload;
     store.dispatch(setClothingItems(data.clothingItems));
     store.dispatch(setOutfits(data.outfits));
     const storageUsage = getStorageUsage();
     store.dispatch(setStorageUsage(storageUsage));
+    isLoadingInitialData = false;
     return next(action);
   }
   return next(action);

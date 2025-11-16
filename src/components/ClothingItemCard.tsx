@@ -1,15 +1,18 @@
 import React from 'react';
-import { ClothingItem, ClothingItemStats } from '../types';
+import { useClothingItemStats } from '../hooks/useAppData';
+import { useAppSelector } from '../store/hooks';
+import { ClothingItem } from '../types';
 import './ClothingItemCard.css';
 
 interface ClothingItemCardProps {
   item: ClothingItem;
-  stats: ClothingItemStats;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const ClothingItemCard: React.FC<ClothingItemCardProps> = ({ item, stats, onEdit, onDelete }) => {
+const ClothingItemCard: React.FC<ClothingItemCardProps> = ({ item, onEdit, onDelete }) => {
+  const outfits = useAppSelector(state => state.outfits.items);
+  const stats = useClothingItemStats(item, outfits);
   return (
     <div className="clothing-card">
       <div className="clothing-card-image">
