@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import OutfitCard from '../components/OutfitCard';
 import OutfitForm from '../components/OutfitForm';
-import { useAppData } from '../hooks/useAppData';
 import '../pages/Wardrobe.css';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { addOutfit, deleteOutfit, updateOutfit } from '../store/slices/outfitsSlice';
 import { Outfit } from '../types';
 import './Outfits.css';
 
 const Outfits: React.FC = () => {
-  const { outfits, clothingItems, addOutfit, updateOutfit, deleteOutfit, isLoading } = useAppData();
+  const dispatch = useAppDispatch();
+  const outfits = useAppSelector(state => state.outfits.items);
+  const clothingItems = useAppSelector(state => state.clothingItems.items);
+  const isLoading = useAppSelector(state => state.app.isLoading);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingOutfit, setEditingOutfit] = useState<Outfit | null>(null);
 
   const handleAddOutfit = (outfit: Omit<Outfit, 'id'>) => {
-    addOutfit(outfit);
+    dispatch(addOutfit(outfit));
     setIsFormOpen(false);
   };
 
   const handleUpdateOutfit = (outfit: Omit<Outfit, 'id'>) => {
     if (editingOutfit) {
-      updateOutfit(editingOutfit.id, outfit);
+      dispatch(updateOutfit({ id: editingOutfit.id, updates: outfit }));
       setEditingOutfit(null);
       setIsFormOpen(false);
     }
@@ -31,7 +36,7 @@ const Outfits: React.FC = () => {
 
   const handleDeleteClick = (outfit: Outfit) => {
     if (window.confirm('Are you sure you want to delete this outfit?')) {
-      deleteOutfit(outfit.id);
+      dispatch(deleteOutfit(outfit.id));
     }
   };
 
